@@ -20,24 +20,6 @@ function loadScript(url, callback)
     head.appendChild(script);
 }
 
-var makeMoves = function(url) {
-    Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
-
-    Parse.Cloud.run('hello', {}, {
-      success: function(result) {
-        chrome.extension.getBackgroundPage().console.log(result + url);
-      },
-      error: function(error) {
-      }
-    });
-
-
-    console.log('making moves');
-    chrome.extension.getBackgroundPage().console.log('Made Moves');
-// Here, do what ever you want
-//test parse
-};
-
 var test = function() {
     Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
     var TestObject = Parse.Object.extend("TestObject");
@@ -51,6 +33,41 @@ var test = function() {
 
 loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", test);
 
+//REAL FUNCTIONS
+    
+var findNames = function(url) {
+    //**THIS**//
+    //**crunchbase or team page search by url for founders names
+    return "aaron";
+}
+
+var namesCombo = function (firstName, lastName, url) {
+    //**COMBINATION OF NAMES**//
+    //run combinations of names
+    //call function with expected emails
+    var testEmail = firstName+"@"+url;
+    Parse.Cloud.run('validateEmail', {email: testEmail}, {
+      success: function(result) {
+        alert(result);
+      },
+      error: function(error) {
+        console.log('failure');
+      }
+    });
+};
+
+var makeMoves = function(url) {
+    //takes just url and gets names
+    //either crunchbase or team page
+    //**might have to do some parsing to get rid of http://
+    namesCombo(findNames(url), "fontenot", url);
+
+    console.log('making moves');
+    chrome.extension.getBackgroundPage().console.log('Made Moves');
+// Here, do what ever you want
+//test parse
+};
+
 var emailCombos = function(email) {
     Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
     Parse.Cloud.run('validateEmail', {email: email}, {
@@ -58,7 +75,7 @@ var emailCombos = function(email) {
         alert(result);
       },
       error: function(error) {
-        alert('failure');
+        console.log('failure');
       }
     });
 }
@@ -75,12 +92,15 @@ loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", makeMove
 // Called when the user clicks on the browser action.
 chrome.browserAction.onClicked.addListener(function(tab) {
   // No tabs or host permissions needed!
-  console.log(tab.url);
+  chrome.extension.getBackgroundPage().console.log(tab.url);
+  //tab.url is working :D
+  //alert(tab.url);
   //loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
   //loadScript("parse-1.3.1.min.js", makeMoves(tab.url));
-  var email = "dave@hackmatch.com"
-  makeMoves(tab.url);
-  emailCombos(email)
+  var email = "dave@hackmatch.com";
+  //**makeMoves(tab.url);
+  makeMoves("hackmatch.com");
+  //emailCombos(email)
   chrome.tabs.executeScript({
     code: 'document.body.style.backgroundColor="red"'
   });
