@@ -38,7 +38,18 @@ loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", test);
 var findNames = function(url) {
     //**THIS**//
     //**crunchbase or team page search by url for founders names
-    return "aaron";
+    Parse.Cloud.run('getFoundersNames', {url: url}, {
+      success: function(result) {
+        alert(result);
+        //alert(JSON.parse(result).data.items[0].path);
+        //alert(result.data.items[0].path);
+        //return "Aaron"
+      },
+      error: function(error) {
+        console.log('failure');
+      }
+    });
+    //return "aaron";
 }
 
 var namesCombo = function (firstName, lastName, url) {
@@ -48,7 +59,7 @@ var namesCombo = function (firstName, lastName, url) {
     var testEmail = firstName+"@"+url;
     Parse.Cloud.run('validateEmail', {email: testEmail}, {
       success: function(result) {
-        alert(result);
+        //alert(result);
       },
       error: function(error) {
         console.log('failure');
@@ -60,7 +71,9 @@ var makeMoves = function(url) {
     //takes just url and gets names
     //either crunchbase or team page
     //**might have to do some parsing to get rid of http://
-    namesCombo(findNames(url), "fontenot", url);
+    //**chain as callback
+    findNames(url);
+    //**namesCombo("dave", "fontenot", url);
 
     console.log('making moves');
     chrome.extension.getBackgroundPage().console.log('Made Moves');
@@ -72,7 +85,7 @@ var emailCombos = function(email) {
     Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
     Parse.Cloud.run('validateEmail', {email: email}, {
       success: function(result) {
-        alert(result);
+        //alert(result);
       },
       error: function(error) {
         console.log('failure');
@@ -99,7 +112,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   //loadScript("parse-1.3.1.min.js", makeMoves(tab.url));
   var email = "dave@hackmatch.com";
   //**makeMoves(tab.url);
-  makeMoves("hackmatch.com");
+  makeMoves("producthunt.com");
   //emailCombos(email)
   chrome.tabs.executeScript({
     code: 'document.body.style.backgroundColor="red"'
