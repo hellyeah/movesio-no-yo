@@ -21,6 +21,12 @@ function loadScript(url, callback)
 }
 
 var makeMoves = function() {
+    Parse.initialize("JktiaCaTnoBYASV7iJIggzC6fZnV1IypMftVuxLG", "vdQEeIP7ZU6iC0oDH9O5yif3OElYsXJTYXKZUahu");
+    var TestObject = Parse.Object.extend("TestObject");
+    var testObject = new TestObject();
+    testObject.save({foo: "bar"}).then(function(object) {
+      alert("yay! it worked");
+    });
     console.log('making moves');
     chrome.extension.getBackgroundPage().console.log('Made Moves');
 // Here, do what ever you want
