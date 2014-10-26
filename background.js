@@ -159,7 +159,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   makeMoves(hostname);
   //emailCombos(email)
   chrome.tabs.executeScript({
-    code: 'document.body.style.backgroundColor="red"'
+    //code: 'document.body.style.backgroundColor="red"'
   });
 });
 
