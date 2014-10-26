@@ -1,6 +1,6 @@
 {
-  "name": "Page Redder",
-  "description": "Make the current page red",
+  "name": "Moves.io",
+  "description": "Make Moves",
   "version": "2.0",
   "permissions": [
     "activeTab"

@@ -20,17 +20,12 @@ function loadScript(url, callback)
     head.appendChild(script);
 }
 
-var makeMoves = function() {
+var makeMoves = function(url) {
     Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
-    var TestObject = Parse.Object.extend("TestObject");
-    var testObject = new TestObject();
-    testObject.save({foo: "bar"}).then(function(object) {
-      alert("yay! it worked");
-    });
 
     Parse.Cloud.run('hello', {}, {
       success: function(result) {
-        chrome.extension.getBackgroundPage().console.log(result);
+        chrome.extension.getBackgroundPage().console.log(result + url);
       },
       error: function(error) {
       }
@@ -43,7 +38,30 @@ var makeMoves = function() {
 //test parse
 };
 
-//loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", makeMoves);
+var test = function() {
+    Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
+    var TestObject = Parse.Object.extend("TestObject");
+    var testObject = new TestObject();
+    testObject.save({foo: "bar"}).then(function(object) {
+      //alert("yay! it worked");
+    });
+
+    console.log('test');
+}
+
+loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", test);
+
+var emailCombos = function() {
+    Parse.Cloud.run('validateEmail', {email : "dave@hackmatch.com"}, {
+      success: function(result) {
+        alert(result);
+      },
+      error: function(error) {
+      }
+    });
+}
+
+loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
 
 /*
 loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", makeMoves(){
@@ -56,7 +74,8 @@ loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", makeMove
 chrome.browserAction.onClicked.addListener(function(tab) {
   // No tabs or host permissions needed!
   console.log(tab.url);
-  loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", makeMoves);
+  //loadScript("parse-1.3.1.min.js", makeMoves(tab.url));
+  makeMoves(tab.url);
   chrome.tabs.executeScript({
     code: 'document.body.style.backgroundColor="red"'
   });
