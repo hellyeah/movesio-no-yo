@@ -93,6 +93,30 @@ var emailCombos = function(email) {
     });
 }
 
+var parseUrl = function (url) {
+    var parser = document.createElement('a'),
+        searchObject = {},
+        queries, split, i;
+    // Let the browser do the work
+    parser.href = url;
+    // Convert query string to object
+    queries = parser.search.replace(/^\?/, '').split('&');
+    for( i = 0; i < queries.length; i++ ) {
+        split = queries[i].split('=');
+        searchObject[split[0]] = split[1];
+    }
+    return {
+        protocol: parser.protocol,
+        host: parser.host,
+        hostname: parser.hostname,
+        port: parser.port,
+        pathname: parser.pathname,
+        search: parser.search,
+        searchObject: searchObject,
+        hash: parser.hash
+    }
+};
+
 //loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
 
 /*
@@ -110,9 +134,29 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   //alert(tab.url);
   //loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
   //loadScript("parse-1.3.1.min.js", makeMoves(tab.url));
-  var email = "dave@hackmatch.com";
+  var hostname = parseUrl(tab.url).hostname;
+
+  //*****if 2 "." then subtract everything from the string before the first "."
+  //while > 2 "."
+  //then .replace(/^[^.]+\./g, "");
+  
+  var count = (hostname.match(/[.]/g) || []).length;
+  //alert(count);
+  if (count >= 2) {
+    hostname = hostname.replace(/^[^.]+\./g, "");
+    //alert(hostname);
+  }
+  /*
+  while (count >= 2) {
+    hostname = hostname.replace(/^[^.]+\./g, "");
+    //alert(hostname);
+  }
+  */
+
+  //var email = "dave@hackmatch.com";
   //**makeMoves(tab.url);
-  makeMoves("producthunt.com");
+  //alert(hostname);
+  makeMoves(hostname);
   //emailCombos(email)
   chrome.tabs.executeScript({
     code: 'document.body.style.backgroundColor="red"'
