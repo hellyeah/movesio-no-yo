@@ -6,11 +6,11 @@ Parse.Cloud.define("hello", function(request, response) {
 });
 
 Parse.Cloud.define("validateEmail", function(request, response) {
-    response.success(request.email);
     Parse.Cloud.httpRequest({
         url: 'https://api.mailgun.net/v2/address/validate',
         params: {
-            address : request.email,
+            address: request.params.email,
+            //address : "dave@hackmatch.com",
             api_key: 'pubkey-70yfqdibeeabn9oa7sc-nmtyo5gfi9z4'
             //eventually this will be request.address
         },

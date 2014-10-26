@@ -51,17 +51,19 @@ var test = function() {
 
 loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", test);
 
-var emailCombos = function() {
-    Parse.Cloud.run('validateEmail', {email : "dave@hackmatch.com"}, {
+var emailCombos = function(email) {
+    Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
+    Parse.Cloud.run('validateEmail', {email: email}, {
       success: function(result) {
         alert(result);
       },
       error: function(error) {
+        alert('failure');
       }
     });
 }
 
-loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
+//loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
 
 /*
 loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", makeMoves(){
@@ -74,8 +76,11 @@ loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", makeMove
 chrome.browserAction.onClicked.addListener(function(tab) {
   // No tabs or host permissions needed!
   console.log(tab.url);
+  //loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
   //loadScript("parse-1.3.1.min.js", makeMoves(tab.url));
+  var email = "dave@hackmatch.com"
   makeMoves(tab.url);
+  emailCombos(email)
   chrome.tabs.executeScript({
     code: 'document.body.style.backgroundColor="red"'
   });
