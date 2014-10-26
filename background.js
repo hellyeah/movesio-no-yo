@@ -21,12 +21,22 @@ function loadScript(url, callback)
 }
 
 var makeMoves = function() {
-    Parse.initialize("JktiaCaTnoBYASV7iJIggzC6fZnV1IypMftVuxLG", "vdQEeIP7ZU6iC0oDH9O5yif3OElYsXJTYXKZUahu");
+    Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
     var TestObject = Parse.Object.extend("TestObject");
     var testObject = new TestObject();
     testObject.save({foo: "bar"}).then(function(object) {
       alert("yay! it worked");
     });
+
+    Parse.Cloud.run('hello', {}, {
+      success: function(result) {
+        chrome.extension.getBackgroundPage().console.log(result);
+      },
+      error: function(error) {
+      }
+    });
+
+
     console.log('making moves');
     chrome.extension.getBackgroundPage().console.log('Made Moves');
 // Here, do what ever you want

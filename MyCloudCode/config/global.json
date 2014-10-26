@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "movesio"
+        }, 
+        "movesio": {
+            "applicationId": "endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", 
+            "masterKey": "HGjzmxUg2mYP7WQdP1PbGsvCwGFJXbd51xMIAF0B"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.1"
+    }
+}
