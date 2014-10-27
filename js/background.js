@@ -1,8 +1,8 @@
-// Copyright (c) 2011 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 chrome.extension.getBackgroundPage().console.log('foo');
 
+//**Initialization**//
+
+//Load JS files
 function loadScript(url, callback)
 {
     // Adding the script tag to the head as suggested before
@@ -20,46 +20,26 @@ function loadScript(url, callback)
     head.appendChild(script);
 }
 
-var test = function() {
+var initializeParse = function() {
+    //Initialized Parse
     Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
+    //Saves test object
     var TestObject = Parse.Object.extend("TestObject");
     var testObject = new TestObject();
     testObject.save({foo: "bar"}).then(function(object) {
       //alert("yay! it worked");
     });
-
-    console.log('test');
 }
 
-loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", test);
+loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", initializeParse);
 
-//REAL FUNCTIONS
-    
-var findNames = function(url) {
-    //**THIS**//
+//**REAL FUNCTIONS**//
+
+var getEmailWithURL = function (url) {
     //**crunchbase or team page search by url for founders names
-    Parse.Cloud.run('getFoundersNames', {url: url}, {
+    Parse.Cloud.run('getFoundersEmail', {url: url}, {
       success: function(result) {
         alert(result);
-        //alert(JSON.parse(result).data.items[0].path);
-        //alert(result.data.items[0].path);
-        //return "Aaron"
-      },
-      error: function(error) {
-        console.log('failure');
-      }
-    });
-    //return "aaron";
-}
-
-var namesCombo = function (firstName, lastName, url) {
-    //**COMBINATION OF NAMES**//
-    //run combinations of names
-    //call function with expected emails
-    var testEmail = firstName+"@"+url;
-    Parse.Cloud.run('validateEmail', {email: testEmail}, {
-      success: function(result) {
-        //alert(result);
       },
       error: function(error) {
         console.log('failure');
@@ -68,30 +48,26 @@ var namesCombo = function (firstName, lastName, url) {
 };
 
 var makeMoves = function(url) {
-    //takes just url and gets names
-    //either crunchbase or team page
-    //**might have to do some parsing to get rid of http://
-    //**chain as callback
-    findNames(url);
-    //**namesCombo("dave", "fontenot", url);
-
-    console.log('making moves');
+    getEmailWithURL(url);
     chrome.extension.getBackgroundPage().console.log('Made Moves');
-// Here, do what ever you want
-//test parse
 };
 
-var emailCombos = function(email) {
-    Parse.initialize("endFPswOSsCN37MBloqoBjGvQWpmO6XsvQtV0cZ0", "lQiHSY3tM2hjdFSTEzfxV0dMfHCBT8n82zRwYDfu");
-    Parse.Cloud.run('validateEmail', {email: email}, {
-      success: function(result) {
-        //alert(result);
-      },
-      error: function(error) {
-        console.log('failure');
-      }
-    });
-}
+// Called when the user clicks on the browser action.
+chrome.browserAction.onClicked.addListener(function(tab) {
+  // No tabs or host permissions needed! 
+  // tab.url is current url
+  chrome.extension.getBackgroundPage().console.log(tab.url);
+
+  var hostname = parseUrl(tab.url).hostname;
+
+  makeMoves(stripSubdomains(hostname));
+
+  chrome.tabs.executeScript({
+    //code: 'document.body.style.backgroundColor="red"'
+  });
+});
+
+//HELPER FUNCTIONS//
 
 var parseUrl = function (url) {
     var parser = document.createElement('a'),
@@ -117,50 +93,20 @@ var parseUrl = function (url) {
     }
 };
 
-//loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
+var numberOfPeriods = function (string) {
+  return (string.match(/[.]/g) || []).length;
+};
 
-/*
-loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", makeMoves(){
-
-});
-*/
-
-
-// Called when the user clicks on the browser action.
-chrome.browserAction.onClicked.addListener(function(tab) {
-  // No tabs or host permissions needed!
-  chrome.extension.getBackgroundPage().console.log(tab.url);
-  //tab.url is working :D
-  //alert(tab.url);
-  //loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", emailCombos);
-  //loadScript("parse-1.3.1.min.js", makeMoves(tab.url));
-  var hostname = parseUrl(tab.url).hostname;
-
-  //*****if 2 "." then subtract everything from the string before the first "."
-  //while > 2 "."
-  //then .replace(/^[^.]+\./g, "");
-  
-  var count = (hostname.match(/[.]/g) || []).length;
-  //alert(count);
-  if (count >= 2) {
-    hostname = hostname.replace(/^[^.]+\./g, "");
-    //alert(hostname);
+//**doesnt work for .co.uk right now or endings with multiple periods
+//could just split the string from the right of 2nd to last period
+var stripSubdomains = function (url) {
+  if (numberOfPeriods(url) >= 2) {
+    //remove one subdomain then call function recursively on that new url
+    return stripSubdomains(url.replace(/^[^.]+\./g, ""));
   }
-  /*
-  while (count >= 2) {
-    hostname = hostname.replace(/^[^.]+\./g, "");
-    //alert(hostname);
+  else {
+    return url;
   }
-  */
-
-  //var email = "dave@hackmatch.com";
-  //**makeMoves(tab.url);
-  //alert(hostname);
-  makeMoves(hostname);
-  //emailCombos(email)
-  chrome.tabs.executeScript({
-    //code: 'document.body.style.backgroundColor="red"'
-  });
-});
+};
 
 
