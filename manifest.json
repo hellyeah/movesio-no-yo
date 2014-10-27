@@ -1,7 +1,8 @@
 {
-  "name": "Moves.io",
+  "name": "Make Moves",
+  "short_name": "moves.io",
   "description": "Instantly get any founder's email.",
-  "version": "2.0",
+  "version": "2.2",
   "permissions": [
     "activeTab"
   ],
