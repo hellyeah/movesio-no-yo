@@ -31,7 +31,22 @@ var initializeParse = function() {
     });
 }
 
+var asyncTracking = function () {
+
+  // var _gaq = _gaq || [];
+  // _gaq.push(['_setAccount', 'UA-56144706-1']);
+  // _gaq.push(['_trackPageview']);
+
+  // (function() {
+  //   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  //   ga.src = 'https://ssl.google-analytics.com/ga.js';
+  //   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  // })();
+
+}
+
 loadScript("https://parse.com/downloads/javascript/parse-1.3.1.min.js", initializeParse);
+//loadScript(asyncTracking);
 
 //**REAL FUNCTIONS**//
 
@@ -56,6 +71,11 @@ var makeMoves = function(url) {
 chrome.browserAction.onClicked.addListener(function(tab) {
   // No tabs or host permissions needed! 
   // tab.url is current url
+  //**Analytics**//
+  //do one for works and doesnt work
+  //_gaq.push(['_trackPageview']);
+  _gaq.push(['_trackEvent', tab.url, 'clicked']);
+
   chrome.extension.getBackgroundPage().console.log(tab.url);
 
   var hostname = parseUrl(tab.url).hostname;
