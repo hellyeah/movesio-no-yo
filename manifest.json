@@ -2,7 +2,8 @@
   "name": "Make Moves",
   "short_name": "moves.io",
   "description": "Instantly get any founder's email.",
-  "version": "2.2",
+  "version": "2.3",
+  "update_url": "http://moves.io/updates.xml",
   "permissions": [
     "activeTab"
   ],
