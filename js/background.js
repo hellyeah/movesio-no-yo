@@ -63,6 +63,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   makeMoves(stripSubdomains(hostname));
 
   chrome.tabs.executeScript({
+    //can do something here to tab
     //code: 'document.body.style.backgroundColor="red"'
   });
 });
