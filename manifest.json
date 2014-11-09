@@ -1,9 +1,8 @@
 {
-  "name": "Make Moves",
-  "short_name": "moves.io",
+  "name": "Moves.io",
+  "short_name": "Make Moves",
   "description": "Instantly get any founder's email.",
-  "version": "2.3",
-  "update_url": "http://moves.io/updates.xml",
+  "version": "2.4",
   "permissions": [
     "activeTab"
   ],
@@ -14,6 +13,9 @@
   "browser_action": {
     "default_title": "Make Moves",
     "default_icon": "img/moves_icon.png"
+  },
+  "chrome_url_overrides" : {
+    "newtab": "myPage.html"
   },
   "permissions": [
         "tabs", 
